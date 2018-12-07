@@ -189,6 +189,7 @@ $ sudo dpkg -i ifm3d_0.9.0_amd64-framegrabber.deb
 $ sudo dpkg -i ifm3d_0.9.0_amd64-image.deb
 $ sudo dpkg -i ifm3d_0.9.0_amd64-tools.deb
 ```
+'FAKE UPDATE' Damien LEGRAND
 
 (The version number embedded in the deb file will be dependent upon which
 version of the `ifm3d` software you are building)
