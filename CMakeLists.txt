@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 cmake_policy(SET CMP0048 NEW)
 # Manage version number here: Major.Minor.Patch (we don't use "tweak")
-project(IFM3D VERSION 0.11.2 LANGUAGES CXX)
+project(IFM3D VERSION 0.12.0 LANGUAGES CXX)
 set(GIT_PROJECT_NAME "ifm3d")
 
 # Make our cmake functions accessible
@@ -71,6 +71,14 @@ endif()
 if(BUILD_TESTS)
   add_subdirectory(${GTEST_CMAKE_DIR} gtest_bin EXCLUDE_FROM_ALL)
   add_custom_target(check)
+  #var
+  if(WIN32)
+    set(TEST_WRAPPER_EXT "bat" )
+  else()
+    set(TEST_WRAPPER_EXT "sh" )
+  endif()
+  set(TEST_WRAPPER_IN "test_wrapper.${TEST_WRAPPER_EXT}.in" )
+  set(TEST_WRAPPER "test_wrapper.${TEST_WRAPPER_EXT}" )
 endif()
 
 # Build sub-modules
