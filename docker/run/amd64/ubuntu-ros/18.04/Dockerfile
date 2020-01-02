@@ -5,6 +5,11 @@ FROM ros:melodic-perception-bionic
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# See:
+# http://answers.ros.org/question/325039/apt-update-fails-cannot-install-pkgs-key-not-working/
+RUN apt-key del 421C365BD9FF1F717815A3895523BAEEB01FA116
+RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+
 RUN apt-get update && apt-get -y upgrade
 RUN apt-get update && \
     apt-get install -y jq \
@@ -33,7 +38,9 @@ RUN apt-get update && \
                        ifm3d-image \
                        ifm3d-opencv \
                        ifm3d-pcicclient \
-                       ifm3d-tools
+                       ifm3d-tools \
+                       ifm3d-python \
+                       ifm3d-python3
 
 RUN id ifm 2>/dev/null || useradd --uid 30000 --create-home -s /bin/bash -U ifm
 RUN echo "ifm ALL=(ALL) NOPASSWD: ALL" | tee -a /etc/sudoers

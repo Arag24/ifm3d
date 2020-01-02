@@ -18,6 +18,13 @@ if (BUILD_MODULE_FRAMEGRABBER)
   file(GLOB IFM3D_TOOLS_FG_SOURCES fg/*.cpp)
   set(IFM3D_TOOLS_SOURCES ${IFM3D_TOOLS_SOURCES} ${IFM3D_TOOLS_FG_SOURCES})
 endif()
+if (BUILD_MODULE_SWUPDATER)
+  file(GLOB IFM3D_TOOLS_SWUPDATER_SOURCES swupdater/*.cpp)
+  set(
+    IFM3D_TOOLS_SOURCES
+    ${IFM3D_TOOLS_SOURCES} ${IFM3D_TOOLS_SWUPDATER_SOURCES}
+    )
+endif()
 add_library(ifm3d_tools_shared SHARED ${IFM3D_TOOLS_SOURCES})
 
 #------------------
@@ -37,6 +44,13 @@ if (BUILD_MODULE_FRAMEGRABBER)
   target_include_directories(ifm3d_tools_shared
     PUBLIC
       $<BUILD_INTERFACE:${IFM3D_FG_BINARY_DIR}/include>
+    )
+endif()
+
+if (BUILD_MODULE_SWUPDATER)
+  target_include_directories(ifm3d_tools_shared
+    PUBLIC
+      $<BUILD_INTERFACE:${IFM3D_SWUPDATER_BINARY_DIR}/include>
     )
 endif()
 
@@ -69,7 +83,7 @@ endif(WIN32)
 #------------------
 target_link_libraries(
   ifm3d_tools_shared
-  ifm3d_camera_shared
+  ifm3d_camera
   ${LIB_glog}
   Boost::program_options
   ${CURL_LIBRARIES}
@@ -78,14 +92,21 @@ target_link_libraries(
 if (BUILD_MODULE_FRAMEGRABBER)
   target_link_libraries(
     ifm3d_tools_shared
-    ifm3d_framegrabber_shared
+    ifm3d_framegrabber
+    )
+endif()
+
+if (BUILD_MODULE_SWUPDATER)
+  target_link_libraries(
+    ifm3d_tools_shared
+    ifm3d_swupdater
     )
 endif()
 
 if (BUILD_MODULE_IMAGE)
   target_link_libraries(
     ifm3d_tools_shared
-    ifm3d_image_shared
+    ifm3d_image
     )
 endif()
 

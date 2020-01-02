@@ -11,7 +11,7 @@ Installing ifm3d from source
   </tr>
   <tr>
     <td><a href="http://www.boost.org">Boost</a></td>
-    <td>framegrabber, pcicclient, tools</td>
+    <td>framegrabber, pcicclient, tools, pybind11</td>
     <td>We use Boost ASIO (header-only) to handle cross-platform network
      communication with the camera. While ASIO itself is header-only, it does
      require runtime linking to Boost System. We also use Boost Program Options
@@ -19,40 +19,48 @@ Installing ifm3d from source
   </tr>
   <tr>
     <td><a href="http://www.cmake.org">CMake</a></td>
-    <td>camera, framegrabber, image, opencv, pcicclient, tools</td>
+    <td>camera, framegrabber, swupdater, image, opencv, pcicclient, tools,
+    pybind11</td>
     <td>Meta-build framework</td>
   </tr>
   <tr>
     <td><a href="https://curl.haxx.se/libcurl">Curl</a></td>
-    <td>tools</td>
+    <td>tools, swupdater</td>
     <td>Used to help enable command-line based firmware flashing.</td>
   </tr>
   <tr>
     <td><a href="https://github.com/google/glog">Glog</a></td>
-    <td>camera, framegrabber, image, opencv, pcicclient, tools</td>
+    <td>camera, framegrabber, swupdater, image, opencv, pcicclient, tools,
+    pybind11</td>
     <td>Logging framework</td>
   </tr>
   <tr>
     <td><a href="https://github.com/google/googletest">Gtest</a></td>
-    <td>camera, framegrabber, image, opencv, pcicclient, tools</td>
+    <td>camera, framegrabber, swupdater, image, opencv, pcicclient, tools</td>
     <td>Unit testing framework</td>
   </tr>
   <tr>
     <td><a href="http://xmlrpc-c.sourceforge.net/">libxmlrpc</a></td>
-    <td>camera</td>
+    <td>camera, pybind11</td>
     <td>XMLRPC client used call into the camera configuration interface</td>
   </tr>
   <tr>
     <td><a href="http://opencv.org">OpenCV</a></td>
-    <td>image, opencv</td>
+    <td>image, opencv, pybind11</td>
     <td>N-dimensional array container for encoding 2d and 3d image data</td>
   </tr>
   <tr>
     <td><a href="http://pointclouds.org">PCL</a></td>
     <td>image</td>
     <td>A 3D point cloud encoding. NOTE: the PCL dependency in ifm3d is
-    header-only (we need to construct a point cloud) however there is no runtime
-    linking dependency.</td>
+    header-only (we need to construct a point cloud) however there is no
+    runtime linking dependency.</td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/pybind/pybind11">pybind11</a></td>
+    <td>pybind11</td>
+    <td>A header-only library that exposes C++ types in Python and vice versa,
+    mainly to create Python bindings of existing C++ code.</td>
   </tr>
 </table>
 
@@ -110,10 +118,11 @@ $ make
 $ make check
 $ make package
 $ make repackage
-$ sudo dpkg -i ifm3d_0.9.0_amd64-camera.deb
-$ sudo dpkg -i ifm3d_0.9.0_amd64-framegrabber.deb
-$ sudo dpkg -i ifm3d_0.9.0_amd64-image.deb
-$ sudo dpkg -i ifm3d_0.9.0_amd64-tools.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-camera.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-swupdater.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-framegrabber.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-image.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-tools.deb
 ```
 
 (The version number embedded in the deb file will be dependent upon which
@@ -134,9 +143,9 @@ A few important notes when building from source:
   that, the build process allows you to explicitly call out which version of
   OpenCV you wish to use. For example, if you are using OpenCV 2.4, your
   `cmake` line above should look something like:
-  `$ cmake -DCMAKE_INSTALL_PREFIX=/usr -DFORCE_OPENCV2=ON ..`. Similarly, if you using
-   OpenCV 3, your `cmake` line above should look something like:
-   `$ cmake -DCMAKE_INSTALL_PREFIX=/usr -DFORCE_OPENCV3=ON ..`
+  `$ cmake -DCMAKE_INSTALL_PREFIX=/usr -DFORCE_OPENCV2=ON ..`. Similarly, if 
+  you are using OpenCV 3, your `cmake` line above should look something like:
+  `$ cmake -DCMAKE_INSTALL_PREFIX=/usr -DFORCE_OPENCV3=ON ..`
 
 * Experienced users may be puzzled by the `repackage` step. If you are simply
   building for your local machine, you can skip it (albeit, with minimal
@@ -168,11 +177,19 @@ $ make
 $ make check
 $ make package
 $ make repackage
-$ sudo dpkg -i ifm3d_0.9.0_amd64-camera.deb
-$ sudo dpkg -i ifm3d_0.9.0_amd64-framegrabber.deb
-$ sudo dpkg -i ifm3d_0.9.0_amd64-opencv.deb
-$ sudo dpkg -i ifm3d_0.9.0_amd64-tools.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-camera.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-framegrabber.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-swupdater.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-opencv.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-tools.deb
 ```
+
+#### Building the Python Bindings
+
+There are several options/configurations available for building and/or
+installing the `pybind11` module. For this reason, building/installing the
+`pybind11` module is not covered in this document. Please refer to the 
+[python](python.md) documentation for installation instructions.
 
 #### A sumo-build
 
@@ -186,10 +203,11 @@ $ make -j 8
 $ make check
 $ make package
 $ make repackage
-$ sudo dpkg -i ifm3d_0.9.0_amd64-camera.deb
-$ sudo dpkg -i ifm3d_0.9.0_amd64-framegrabber.deb
-$ sudo dpkg -i ifm3d_0.9.0_amd64-image.deb
-$ sudo dpkg -i ifm3d_0.9.0_amd64-opencv.deb
-$ sudo dpkg -i ifm3d_0.9.0_amd64-tools.deb
-$ sudo dpkg -i ifm3d_0.9.0_amd64-pcicclient.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-camera.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-framegrabber.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-swupdater.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-image.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-opencv.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-tools.deb
+$ sudo dpkg -i ifm3d_0.14.1_amd64-pcicclient.deb
 ```

@@ -68,6 +68,7 @@ namespace ifm3d
     EXTRINSIC_CALIBRATION = 400,
     INTRINSIC_CALIBRATION = 401,
     INVERSE_INTRINSIC_CALIBRATION = 402,
+    JSON_MODEL = 500,
   };
   // intrinsic param key which cahn be used for indexing the vector of the
   // intrinsic parameter
@@ -343,6 +344,17 @@ namespace ifm3d
     float IlluTemp();
 
     /**
+     * Returns the JSON model of the output of the active application
+     *
+     * NOTE: To get the JSON data for the application running on the device,
+     * you need to make sure your current pcic schema asks for it by including
+     * ifm3d::JSON_MODEL in the schema. This will return a blank JSON string
+     * ("{}") for Camera devices like the O3D303, versus ifm Smart Sensors like
+     * the O3D302.
+     */
+    std::string JSONModel();
+
+    /**
      * This is the interface hook that synchronizes the internally wrapped byte
      * buffer with the semantically meaningful image/cloud data
      * structures. Within the overall `ifm3d` framework, this function is
@@ -480,6 +492,11 @@ namespace ifm3d
      * current frame data.
      */
     float illu_temp_;
+
+    /**
+     * JSON string of the active application output
+     */
+    std::string json_model_;
 
   private:
     /**

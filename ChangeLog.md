@@ -1,3 +1,59 @@
+## Changes between ifm3d 0.16.0 and 0.17.0
+* Reverted changes in 0.16.0 (FrameGrabberUdp -- No viable path to UDP
+  implementation in F/W)
+* Bugfixes
+  * Issue with libcurl usage on 32bit targets
+  * Corrected minimum firmware version required for inverse intrinsics
+  * Corrected handling of spurious wakes in FrameGrabber
+  * Fixed ComputeCartesian python unit test to properly blank out invalid
+    pixels
+  * Changed `build` Dockerfiles to use pip for numpy/pytest
+  * Fixed race condition in PCICClient unit tests
+  * Changed setup.py to honor the environment variables per the Windows installation instructions
+  * Updated installation documentation for Windows
+
+## Changes between ifm3d 0.15.1 and 0.16.0
+* Created new `framegrabberudp` module for consuming data over UDP interface
+
+## Changes between ifm3d 0.15.0 and 0.15.1
+* Minor updates to allow for cross-compiling ifm3d for the O3D3XX
+*  PCIC timeout issue fixed
+
+## Changes between ifm3d 0.14.1 and 0.15.0
+* Added Interface for getting json_model from O3D3xx devices.
+
+## Changes between ifm3d 0.14.0 and 0.14.1
+* Fixes to how timeouts are handled in `swupdate` module
+* Updated embedded JSON library to
+  [3.6.1](https://github.com/nlohmann/json/releases/tag/v3.6.1),
+  single-header.
+
+## Changes between ifm3d 0.13.0 and 0.14.0
+* New module: swupdater -- utilities for updating camera firmware
+    * Ported functionality from `swupdate` command into its own library for
+      programmatic consumption.
+    * Updated certain semantics of the `swupdate` command in the `tools`
+      module to match those of the other ifm3d `tools` commands
+        * Updated command line switch naming to match other ifm3d tools:
+          * `check` subcommand now invoked by `-c` or `--check`
+          * `reboot` subcommand now invoked by `-r` or `--reboot`
+        * `file` subcommand will now test for recovery and automatically
+          reboot the device into recovery as needed.
+* Disabled framegrabber's InverseIntrinsicParamSchema test due to suspected
+  false failures. Test case will be investigated and re-opened in a future
+  release.
+* Fixed issues with unit test scripts on Windows
+* Fixed Windows build documentation
+  * Added `BUILD_SHARED_LIBS` definition to `glog` to address issues with
+    logging to STDERR in Windows binaries
+  * Parameterized the CMake generator for easier building when multiple
+    versions of MSVC are installed concurrently
+
+## Changes between ifm3d 0.12.0 and 0.13.0
+* Honor semantics of CMake's BUILD_SHARED_LIBS flag (ON by default). Setting
+  to off will build and link against ifm3d modules as static libraries.
+* New module: pybind11 -- Python bindings for the the C++ API
+
 ## Changes between ifm3d 0.11.2 and 0.12.0
 
 * Fixes to build infrastructure in support of windows unit tests
